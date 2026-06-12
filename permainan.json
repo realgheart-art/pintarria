@@ -1,0 +1,5 @@
+[
+  { "nama": "Misi Sifir",     "emoji": "🚀", "url": "https://USERNAME.github.io/misi-sifir/",     "kategori": "Matematik", "aktif": true },
+  { "nama": "Math Heroes",    "emoji": "🦸", "url": "https://USERNAME.github.io/math-heroes/",    "kategori": "Matematik", "aktif": true },
+  { "nama": "Grammar Heroes", "emoji": "📖", "url": "https://USERNAME.github.io/grammar-heroes/", "kategori": "Bahasa",    "aktif": true }
+]

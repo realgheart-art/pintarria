@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Pintar Ria</title>
+<meta name="description" content="Taman belajar huruf, nombor, warna & bentuk">
+<meta name="theme-color" content="#ff7a59">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Pintar Ria">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --tinta:#1e2a4a; --kertas:#fef9f0; --kad:#ffffff;
+    --koral:#ff7a59; --koral-gelap:#ed5c39;
+    --pudina:#3dc9b0; --kuning:#ffc94d; --ungu:#7c5cff;
+    --kelabu:#8a93a6; --garis:#ece3d4;
+    --jejari:22px; --bayang:0 18px 40px -18px rgba(30,42,74,.28);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Nunito',sans-serif;color:var(--tinta);background:var(--kertas);
+    min-height:100vh;display:flex;align-items:center;justify-content:center;
+    padding:20px;overflow-x:hidden;position:relative}
+  h1,h2,h3,.papar{font-family:'Baloo 2',cursive}
+
+  .latar{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+  .terapung{position:absolute;font-family:'Baloo 2';font-weight:800;opacity:.13;animation:apung 9s ease-in-out infinite}
+  @keyframes apung{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-26px) rotate(4deg)}}
+  @media (prefers-reduced-motion:reduce){.terapung{animation:none}}
+
+  .skrin{position:relative;z-index:1;width:100%;max-width:440px}
+  .skrin.lebar{max-width:880px}
+  .kad{background:var(--kad);border-radius:var(--jejari);box-shadow:var(--bayang);padding:34px 30px;border:1px solid var(--garis)}
+
+  .jenama{display:flex;align-items:center;gap:12px;justify-content:center;margin-bottom:6px}
+  .logo{width:52px;height:52px;border-radius:16px;background:var(--koral);display:grid;place-items:center;font-size:28px;box-shadow:0 8px 18px -8px var(--koral)}
+  .jenama h1{font-size:30px;font-weight:800}
+  .slogan{text-align:center;color:var(--kelabu);font-weight:600;margin-bottom:26px;font-size:15px}
+
+  label{display:block;font-weight:700;font-size:14px;margin:14px 0 6px}
+  input,select{width:100%;padding:13px 15px;border:2px solid var(--garis);border-radius:14px;
+    font-family:inherit;font-size:15px;font-weight:600;background:#fffdf8;transition:border-color .15s,box-shadow .15s}
+  input:focus,select:focus{outline:none;border-color:var(--koral);box-shadow:0 0 0 4px rgba(255,122,89,.18)}
+  .pin-besar{text-align:center;letter-spacing:10px;font-size:24px;font-family:'Baloo 2'}
+
+  .btn{width:100%;padding:14px;border:none;border-radius:14px;cursor:pointer;font-family:'Baloo 2';
+    font-weight:700;font-size:17px;color:#fff;background:var(--koral);margin-top:22px;
+    transition:transform .1s,filter .15s;box-shadow:0 10px 20px -10px var(--koral)}
+  .btn:hover{filter:brightness(1.04)}
+  .btn:active{transform:translateY(1px)}
+  .btn:disabled{opacity:.6;cursor:not-allowed}
+  .btn.alt{background:var(--pudina);box-shadow:0 10px 20px -10px var(--pudina)}
+  .btn.kosong{background:transparent;color:var(--koral);box-shadow:none;margin-top:6px}
+
+  .mesej{margin-top:16px;padding:12px 14px;border-radius:12px;font-weight:700;font-size:14px;display:none}
+  .mesej.ralat{display:block;background:#ffe9e4;color:#c0392b}
+
+  .bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}
+  .bar .kiri{display:flex;align-items:center;gap:12px}
+  .keluar{background:none;border:2px solid var(--garis);border-radius:12px;padding:8px 14px;font-family:'Baloo 2';font-weight:700;cursor:pointer;color:var(--kelabu)}
+  .keluar:hover{border-color:var(--koral);color:var(--koral)}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:16px;margin-top:8px}
+  .anak{position:relative;background:#fffdf8;border:2px solid var(--garis);border-radius:18px;padding:20px 14px;text-align:center;cursor:pointer;transition:all .15s}
+  .anak:hover{border-color:var(--pudina);transform:translateY(-3px)}
+  .anak .muka{font-size:46px}
+  .anak .nm{font-family:'Baloo 2';font-weight:700;margin-top:8px}
+  .anak .um{font-size:13px;color:var(--kelabu);font-weight:600}
+  .padam{position:absolute;top:6px;right:6px;width:26px;height:26px;border:none;border-radius:50%;background:#ffe0d8;color:#c0392b;font-weight:800;cursor:pointer;line-height:1}
+  .tambah{border:2px dashed var(--garis);color:var(--kelabu);display:grid;place-items:center;min-height:140px;border-radius:18px;cursor:pointer;font-family:'Baloo 2';font-weight:700}
+  .tambah:hover{border-color:var(--koral);color:var(--koral)}
+
+  .kategori{font-family:'Baloo 2';font-weight:700;font-size:15px;color:var(--kelabu);text-align:left;margin:20px 0 8px;text-transform:uppercase;letter-spacing:.6px}
+  .kategori:first-child{margin-top:4px}
+  .tajuk-bhg{font-family:'Baloo 2';font-weight:700;font-size:20px;margin:6px 0 4px}
+  .nota-bhg{color:var(--kelabu);font-weight:600;font-size:14px;margin-bottom:14px}
+
+  .avatars{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+  .av{font-size:26px;width:46px;height:46px;border:2px solid var(--garis);border-radius:12px;display:grid;place-items:center;cursor:pointer}
+  .av.aktif{border-color:var(--koral);background:#fff3ee}
+
+  .pad{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:260px;margin:18px auto 0}
+  .pad button{padding:16px;font-family:'Baloo 2';font-weight:700;font-size:22px;border:2px solid var(--garis);border-radius:14px;background:#fffdf8;cursor:pointer}
+  .pad button:active{background:#fff3ee}
+  .titik{display:flex;gap:12px;justify-content:center;margin:10px 0}
+  .titik span{width:16px;height:16px;border-radius:50%;border:2px solid var(--koral)}
+  .titik span.isi{background:var(--koral)}
+
+  .bingkai{position:fixed;inset:0;z-index:50;background:var(--kertas);display:flex;flex-direction:column}
+  .bingkai-bar{display:flex;align-items:center;gap:14px;padding:10px 16px;background:var(--kad);border-bottom:1px solid var(--garis)}
+  .bingkai-bar .papar{font-weight:700;font-size:18px}
+  .kembali{background:var(--koral);color:#fff;border:none;border-radius:12px;padding:9px 16px;font-family:'Baloo 2';font-weight:700;font-size:15px;cursor:pointer}
+  .bingkai iframe{flex:1;border:none;width:100%}
+
+  .fab{position:fixed;bottom:18px;right:18px;z-index:40;border:none;cursor:pointer;background:var(--ungu);color:#fff;font-family:'Baloo 2';font-weight:700;font-size:15px;padding:12px 18px;border-radius:30px;box-shadow:0 10px 24px -8px var(--ungu)}
+
+  .sembunyi{display:none}
+  .pusat{text-align:center}
+  .mini{font-size:13px;color:var(--kelabu);font-weight:600;text-align:center;margin-top:18px}
+</style>
+</head>
+<body>
+
+<div class="latar" id="latar"></div>
+
+<!-- ========== SETUP (mula-mula / tukar PIN) ========== -->
+<div class="skrin sembunyi" id="skrinSetup">
+  <div class="kad">
+    <div class="jenama"><div class="logo">🎈</div><h1>Pintar Ria</h1></div>
+    <p class="slogan" id="setupSlogan">Selamat datang! Mari sediakan app.</p>
+    <div id="setupNamaWrap">
+      <label>Nama ibu bapa / guru (pilihan)</label>
+      <input type="text" id="sNama" placeholder="Cth: Puan Aishah">
+    </div>
+    <label id="sPinLabel">Cipta PIN ibu bapa (4 digit)</label>
+    <input type="tel" id="sPin" class="pin-besar" maxlength="4" inputmode="numeric" placeholder="••••">
+    <label>Sahkan PIN</label>
+    <input type="tel" id="sPin2" class="pin-besar" maxlength="4" inputmode="numeric" placeholder="••••">
+    <button class="btn" id="btnSetup">Simpan &amp; Mula</button>
+    <button class="btn kosong sembunyi" id="btnSetupBatal">Batal</button>
+    <div class="mesej" id="msgSetup"></div>
+    <p class="mini">🔒 PIN ini untuk ruang ibu bapa. Anak guna PIN sendiri.</p>
+  </div>
+</div>
+
+<!-- ========== PEMILIH PROFIL (skrin utama) ========== -->
+<div class="skrin lebar sembunyi" id="skrinPicker">
+  <div class="kad pusat">
+    <div class="jenama"><div class="logo">🎈</div><h1>Pintar Ria</h1></div>
+    <p class="slogan">Siapa nak belajar hari ini?</p>
+    <div class="grid" id="gridPicker"></div>
+    <button class="btn kosong" id="btnIbuBapa" style="max-width:240px;margin:20px auto 0">👨‍👩‍👧 Ruang Ibu Bapa</button>
+  </div>
+</div>
+
+<!-- ========== GERBANG PIN IBU BAPA ========== -->
+<div class="skrin sembunyi" id="skrinGate">
+  <div class="kad pusat">
+    <div style="font-size:48px">🔒</div>
+    <h2 style="font-size:22px">Ruang Ibu Bapa</h2>
+    <p class="nota-bhg">Masukkan PIN ibu bapa</p>
+    <input type="tel" id="gPin" class="pin-besar" maxlength="4" inputmode="numeric" placeholder="••••">
+    <button class="btn" id="btnGate">Masuk</button>
+    <button class="btn kosong" id="btnGateBatal">Kembali</button>
+    <div class="mesej" id="msgGate"></div>
+  </div>
+</div>
+
+<!-- ========== URUS (dalam ruang ibu bapa) ========== -->
+<div class="skrin lebar sembunyi" id="skrinUrus">
+  <div class="kad">
+    <div class="bar">
+      <div class="kiri"><div class="logo">🎈</div><div><h2 id="urusSapa" style="font-size:22px">Ruang Ibu Bapa</h2></div></div>
+      <button class="keluar" id="btnKeluarUrus">Keluar</button>
+    </div>
+    <p class="tajuk-bhg">Profil Anak</p>
+    <p class="nota-bhg">Tap profil untuk edit, atau ✕ untuk padam.</p>
+    <div class="grid" id="gridUrus"></div>
+    <button class="btn kosong" id="btnTukarPin" style="max-width:240px;margin:20px auto 0">Tukar PIN ibu bapa</button>
+    <div class="mesej" id="msgUrus"></div>
+  </div>
+</div>
+
+<!-- ========== TAMBAH / EDIT PROFIL ========== -->
+<div class="skrin sembunyi" id="skrinTambah">
+  <div class="kad">
+    <h2 class="pusat" id="tambahTajuk" style="font-size:22px;margin-bottom:18px">Tambah Profil Anak</h2>
+    <label>Nama anak</label>
+    <input type="text" id="aNama" placeholder="Nama anak">
+    <label>Umur</label>
+    <select id="aUmur"><option>7</option><option>8</option><option>9</option><option>10</option></select>
+    <label>Pilih avatar</label>
+    <div class="avatars" id="avatars"></div>
+    <label id="aPinLabel">PIN 4 digit (anak guna untuk log masuk)</label>
+    <input type="tel" id="aPin" maxlength="4" placeholder="1234" inputmode="numeric">
+    <button class="btn alt" id="btnSimpanAnak">Simpan Profil</button>
+    <button class="btn kosong" id="btnBatalAnak">Batal</button>
+    <div class="mesej" id="msgTambah"></div>
+  </div>
+</div>
+
+<!-- ========== PIN ANAK ========== -->
+<div class="skrin sembunyi" id="skrinPin">
+  <div class="kad pusat">
+    <div id="pinMuka" style="font-size:60px">🦊</div>
+    <h2 id="pinNama" style="font-size:24px;margin-top:6px">Anak</h2>
+    <p class="nota-bhg">Masukkan PIN kamu</p>
+    <div class="titik" id="pinTitik"><span></span><span></span><span></span><span></span></div>
+    <div class="pad" id="padPin"></div>
+    <button class="btn kosong" id="btnBatalPin">Kembali</button>
+    <div class="mesej" id="msgPin"></div>
+  </div>
+</div>
+
+<!-- ========== HOME ANAK ========== -->
+<div class="skrin lebar sembunyi" id="skrinAnak">
+  <div class="kad pusat">
+    <div style="font-size:64px" id="anakMuka">🦊</div>
+    <h2 style="font-size:28px">Hai <span id="anakNama">kawan</span>! 🌟</h2>
+    <p class="nota-bhg">Jom pilih permainan kamu</p>
+    <div id="gridMain" style="margin-top:14px"></div>
+    <p class="mini">Tap permainan untuk mula. Lebih banyak akan datang!</p>
+    <button class="btn kosong" id="btnKeluarAnak" style="max-width:200px;margin:18px auto 0">Keluar</button>
+  </div>
+</div>
+
+<!-- ========== BINGKAI PERMAINAN ========== -->
+<div id="bingkai" class="bingkai sembunyi">
+  <div class="bingkai-bar">
+    <button id="btnTutupBingkai" class="kembali">← Kembali</button>
+    <span id="bingkaiTajuk" class="papar"></span>
+  </div>
+  <iframe id="bingkaiFrame" title="Permainan" allow="fullscreen"></iframe>
+</div>
+
+<button id="pasang" class="fab sembunyi">⬇️ Pasang App</button>
+
+<script>
+const $ = id => document.getElementById(id);
+const BUKA_TAB = false;   // tukar true jika app tak mahu dipaparkan dalam bingkai
+
+/* ---------- pangkalan data peranti ---------- */
+const DB = {
+  get(k,d){ try{ const v=JSON.parse(localStorage.getItem(k)); return v==null?d:v; }catch(e){ return d; } },
+  set(k,v){ localStorage.setItem(k, JSON.stringify(v)); },
+  del(k){ localStorage.removeItem(k); }
+};
+const K = { ibubapa:'pr_ibubapa', profil:'pr_profil', kemajuan:'pr_kemajuan' };
+function uuid(){ return crypto.randomUUID ? crypto.randomUUID() : 'id-'+Date.now()+'-'+Math.random().toString(16).slice(2); }
+async function hash(teks,salt){
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(teks+salt));
+  return [...new Uint8Array(buf)].map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+
+/* ---------- ibu bapa (PIN tunggal) ---------- */
+function adaIbuBapa(){ return !!DB.get(K.ibubapa,null); }
+async function setupIbuBapa(nama,pin){
+  if(!/^\d{4}$/.test(pin)) return {ok:false,mesej:'PIN mesti 4 digit angka.'};
+  const salt=uuid();
+  DB.set(K.ibubapa,{nama:(nama||'').trim(),pinHash:await hash(pin,salt),pinSalt:salt});
+  return {ok:true};
+}
+async function sahPinIbuBapa(pin){
+  const ib=DB.get(K.ibubapa,null);
+  return ib ? (await hash(pin||'',ib.pinSalt))===ib.pinHash : false;
+}
+async function tukarPinIbuBapa(pin){
+  if(!/^\d{4}$/.test(pin)) return {ok:false,mesej:'PIN mesti 4 digit angka.'};
+  const ib=DB.get(K.ibubapa,null), salt=uuid();
+  ib.pinHash=await hash(pin,salt); ib.pinSalt=salt; DB.set(K.ibubapa,ib);
+  return {ok:true};
+}
+function namaIbuBapa(){ const ib=DB.get(K.ibubapa,null); return ib&&ib.nama?ib.nama:''; }
+
+/* ---------- profil anak ---------- */
+function semuaProfil(){ return DB.get(K.profil,[]); }
+async function simpanProfil(d,editId){
+  const nama=(d.nama||'').trim();
+  if(!nama) return {ok:false,mesej:'Nama anak diperlukan.'};
+  const senarai=DB.get(K.profil,[]);
+  if(editId){
+    const p=senarai.find(x=>x.profilId===editId);
+    if(!p) return {ok:false,mesej:'Profil tidak dijumpai.'};
+    p.nama=nama; p.umur=Number(d.umur)||p.umur; p.avatar=d.avatar||p.avatar;
+    if(d.pin){ if(!/^\d{4}$/.test(d.pin)) return {ok:false,mesej:'PIN mesti 4 digit angka.'}; const s=uuid(); p.pinHash=await hash(d.pin,s); p.pinSalt=s; }
+    DB.set(K.profil,senarai); return {ok:true};
+  }
+  if(!/^\d{4}$/.test(d.pin||'')) return {ok:false,mesej:'PIN mesti 4 digit angka.'};
+  const salt=uuid();
+  senarai.push({profilId:uuid(),nama,umur:Number(d.umur)||7,avatar:d.avatar||'🦊',pinHash:await hash(d.pin,salt),pinSalt:salt});
+  DB.set(K.profil,senarai); return {ok:true};
+}
+function padamProfil(id){ DB.set(K.profil, DB.get(K.profil,[]).filter(p=>p.profilId!==id)); }
+async function logMasukAnak(profilId,pin){
+  const p=DB.get(K.profil,[]).find(x=>x.profilId===profilId);
+  if(!p || (await hash(pin||'',p.pinSalt))!==p.pinHash) return {ok:false,mesej:'PIN salah. Cuba lagi!'};
+  return {ok:true,profil:{profilId:p.profilId,nama:p.nama,umur:p.umur,avatar:p.avatar}};
+}
+
+/* ---------- antara muka ---------- */
+const skrin=['skrinSetup','skrinPicker','skrinGate','skrinUrus','skrinTambah','skrinPin','skrinAnak'];
+function tunjuk(id){ skrin.forEach(s=>$(s).classList.toggle('sembunyi', s!==id)); }
+function lapor(el,t){ el.className='mesej ralat'; el.textContent=t; }
+function reset(el){ el.className='mesej'; el.textContent=''; }
+
+let avatarPilih='🦊', pinAnak='', profilSemasa=null, editId=null, setupMod='baru';
+const AVATAR=['🦊','🐼','🦁','🐰','🐯','🐸','🦄','🐙','🐧','🐨'];
+
+(function(){
+  const simbol=['A','B','7','3','●','▲','C','5','■','★','2','D'], warna=['#ff7a59','#3dc9b0','#ffc94d','#7c5cff'];
+  $('latar').innerHTML=simbol.map((s,i)=>{ const sz=Math.round(40+Math.random()*60);
+    return `<span class="terapung" style="left:${Math.random()*92}%;top:${Math.random()*88}%;font-size:${sz}px;color:${warna[i%4]};animation-delay:${(Math.random()*6).toFixed(1)}s">${s}</span>`;
+  }).join('');
+})();
+
+/* ---------- setup / tukar PIN ---------- */
+function bukaSetup(mod){
+  setupMod=mod; reset($('msgSetup')); $('sPin').value=''; $('sPin2').value='';
+  if(mod==='tukar'){
+    $('setupSlogan').textContent='Tukar PIN ibu bapa.';
+    $('setupNamaWrap').classList.add('sembunyi');
+    $('sPinLabel').textContent='PIN baharu (4 digit)';
+    $('btnSetupBatal').classList.remove('sembunyi');
+  }else{
+    $('setupSlogan').textContent='Selamat datang! Mari sediakan app.';
+    $('setupNamaWrap').classList.remove('sembunyi'); $('sNama').value='';
+    $('sPinLabel').textContent='Cipta PIN ibu bapa (4 digit)';
+    $('btnSetupBatal').classList.add('sembunyi');
+  }
+  tunjuk('skrinSetup');
+}
+$('btnSetup').onclick=async()=>{
+  reset($('msgSetup'));
+  if($('sPin').value!==$('sPin2').value){ lapor($('msgSetup'),'PIN tidak sepadan.'); return; }
+  $('btnSetup').disabled=true;
+  const r = setupMod==='tukar' ? await tukarPinIbuBapa($('sPin').value) : await setupIbuBapa($('sNama').value,$('sPin').value);
+  $('btnSetup').disabled=false;
+  if(!r.ok){ lapor($('msgSetup'),r.mesej); return; }
+  tunjuk('skrinUrus'); muatUrus();
+};
+$('btnSetupBatal').onclick=()=>{ tunjuk('skrinUrus'); muatUrus(); };
+
+/* ---------- gerbang ibu bapa ---------- */
+$('btnIbuBapa').onclick=()=>{ reset($('msgGate')); $('gPin').value=''; tunjuk('skrinGate'); };
+$('btnGate').onclick=async()=>{
+  reset($('msgGate')); $('btnGate').disabled=true;
+  const ok=await sahPinIbuBapa($('gPin').value); $('btnGate').disabled=false;
+  if(ok){ tunjuk('skrinUrus'); muatUrus(); } else lapor($('msgGate'),'PIN salah. Cuba lagi.');
+};
+$('btnGateBatal').onclick=()=>tunjuk('skrinPicker');
+$('btnKeluarUrus').onclick=()=>{ tunjuk('skrinPicker'); muatPicker(); };
+$('btnTukarPin').onclick=()=>bukaSetup('tukar');
+
+/* ---------- pemilih profil ---------- */
+function kadAnak(a,padam){
+  return `<div class="anak" data-id="${a.profilId}" data-nama="${a.nama}" data-av="${a.avatar}" data-umur="${a.umur}">
+    ${padam?`<button class="padam" data-del="${a.profilId}">✕</button>`:''}
+    <div class="muka">${a.avatar}</div><div class="nm">${a.nama}</div><div class="um">${a.umur} tahun</div></div>`;
+}
+function muatPicker(){
+  const ps=semuaProfil();
+  $('gridPicker').innerHTML = ps.length
+    ? ps.map(a=>kadAnak(a,false)).join('')
+    : `<p class="mini" style="grid-column:1/-1">Belum ada profil. Masuk Ruang Ibu Bapa untuk tambah anak. 👇</p>`;
+  document.querySelectorAll('#gridPicker .anak').forEach(el=>el.onclick=()=>bukaPin(el.dataset));
+}
+
+/* ---------- urus profil ---------- */
+function muatUrus(){
+  $('urusSapa').textContent = namaIbuBapa() ? 'Hai, '+namaIbuBapa() : 'Ruang Ibu Bapa';
+  const ps=semuaProfil();
+  $('gridUrus').innerHTML = ps.map(a=>kadAnak(a,true)).join('') + `<div class="tambah" id="btnTambahAnak">＋<br>Tambah anak</div>`;
+  $('btnTambahAnak').onclick=()=>bukaTambah(null);
+  document.querySelectorAll('#gridUrus .anak').forEach(el=>el.onclick=()=>bukaTambah(el.dataset));
+  document.querySelectorAll('#gridUrus .padam').forEach(b=>b.onclick=(ev)=>{
+    ev.stopPropagation();
+    if(confirm('Padam profil ini? Kemajuan anak juga akan hilang.')){ padamProfil(b.dataset.del); muatUrus(); }
+  });
+}
+
+/* ---------- tambah / edit profil ---------- */
+function lukisAvatar(){
+  $('avatars').innerHTML=AVATAR.map(a=>`<div class="av ${a===avatarPilih?'aktif':''}" data-av="${a}">${a}</div>`).join('');
+  document.querySelectorAll('#avatars .av').forEach(el=>el.onclick=()=>{
+    document.querySelectorAll('#avatars .av').forEach(x=>x.classList.remove('aktif'));
+    el.classList.add('aktif'); avatarPilih=el.dataset.av;
+  });
+}
+function bukaTambah(d){
+  reset($('msgTambah')); editId = d?d.id:null; avatarPilih = d?d.av:'🦊';
+  $('tambahTajuk').textContent = d?'Edit Profil Anak':'Tambah Profil Anak';
+  $('aNama').value = d?d.nama:''; $('aUmur').value = d?d.umur:'7'; $('aPin').value='';
+  $('aPinLabel').textContent = d?'PIN baharu (biar kosong = kekal)':'PIN 4 digit (anak guna untuk log masuk)';
+  $('aPin').placeholder = d?'••••':'1234';
+  lukisAvatar(); tunjuk('skrinTambah');
+}
+$('btnBatalAnak').onclick=()=>{ tunjuk('skrinUrus'); muatUrus(); };
+$('btnSimpanAnak').onclick=async()=>{
+  reset($('msgTambah')); $('btnSimpanAnak').disabled=true;
+  const r=await simpanProfil({nama:$('aNama').value,umur:$('aUmur').value,avatar:avatarPilih,pin:$('aPin').value}, editId);
+  $('btnSimpanAnak').disabled=false;
+  if(r.ok){ tunjuk('skrinUrus'); muatUrus(); } else lapor($('msgTambah'),r.mesej);
+};
+
+/* ---------- pin anak ---------- */
+function bukaPin(d){
+  profilSemasa=d; pinAnak=''; reset($('msgPin'));
+  $('pinMuka').textContent=d.av; $('pinNama').textContent=d.nama; lukisTitik();
+  $('padPin').innerHTML=[1,2,3,4,5,6,7,8,9,'⌫',0,'✓'].map(k=>`<button data-k="${k}">${k}</button>`).join('');
+  document.querySelectorAll('#padPin button').forEach(b=>b.onclick=()=>tekanPin(b.dataset.k));
+  tunjuk('skrinPin');
+}
+function lukisTitik(){ document.querySelectorAll('#pinTitik span').forEach((s,i)=>s.classList.toggle('isi',i<pinAnak.length)); }
+function tekanPin(k){
+  if(k==='⌫'){ pinAnak=pinAnak.slice(0,-1); lukisTitik(); return; }
+  if(k==='✓'){ return hantarPin(); }
+  if(pinAnak.length<4){ pinAnak+=k; lukisTitik(); if(pinAnak.length===4) hantarPin(); }
+}
+async function hantarPin(){
+  if(pinAnak.length<4) return;
+  const r=await logMasukAnak(profilSemasa.id,pinAnak);
+  if(r.ok){ $('anakMuka').textContent=r.profil.avatar; $('anakNama').textContent=r.profil.nama; tunjuk('skrinAnak'); muatPermainan(); }
+  else{ lapor($('msgPin'),r.mesej); pinAnak=''; lukisTitik(); }
+}
+$('btnBatalPin').onclick=()=>tunjuk('skrinPicker');
+$('btnKeluarAnak').onclick=()=>{ tunjuk('skrinPicker'); muatPicker(); };
+
+/* ---------- permainan (permainan.json) ---------- */
+function bukaPermainan(a){
+  if(!a.url || a.url.indexOf('USERNAME')>-1){ alert('URL "'+a.nama+'" belum diisi dalam permainan.json.'); return; }
+  if(BUKA_TAB){ window.open(a.url,'_blank'); return; }
+  $('bingkaiTajuk').textContent=a.nama; $('bingkaiFrame').src=a.url; $('bingkai').classList.remove('sembunyi');
+}
+$('btnTutupBingkai').onclick=()=>{ $('bingkai').classList.add('sembunyi'); $('bingkaiFrame').src='about:blank'; };
+async function muatPermainan(){
+  $('gridMain').innerHTML='<p class="mini">Memuatkan permainan…</p>';
+  let senarai=[];
+  try{ const res=await fetch('permainan.json',{cache:'no-cache'}); if(res.ok) senarai=await res.json(); }catch(e){}
+  senarai=(senarai||[]).filter(p=>p.aktif!==false);
+  if(!senarai.length){ $('gridMain').innerHTML='<p class="mini">Tiada permainan lagi.</p>'; return; }
+  const kategori={};
+  senarai.forEach(p=>{ const k=p.kategori||'Umum'; (kategori[k]=kategori[k]||[]).push(p); });
+  let h='';
+  Object.keys(kategori).forEach(k=>{
+    h+=`<div class="kategori">${k}</div><div class="grid">`;
+    kategori[k].forEach(p=>{ h+=`<div class="anak" data-nama="${p.nama}" data-url="${p.url}"><div class="muka">${p.emoji||'🎮'}</div><div class="nm">${p.nama}</div></div>`; });
+    h+='</div>';
+  });
+  $('gridMain').innerHTML=h;
+  document.querySelectorAll('#gridMain .anak').forEach(el=>el.onclick=()=>bukaPermainan({nama:el.dataset.nama,url:el.dataset.url}));
+}
+
+/* ---------- pasang PWA ---------- */
+let promptPasang=null;
+window.addEventListener('beforeinstallprompt',e=>{ e.preventDefault(); promptPasang=e; $('pasang').classList.remove('sembunyi'); });
+$('pasang').onclick=async()=>{ if(!promptPasang)return; promptPasang.prompt(); await promptPasang.userChoice; promptPasang=null; $('pasang').classList.add('sembunyi'); };
+window.addEventListener('appinstalled',()=>$('pasang').classList.add('sembunyi'));
+
+/* ---------- service worker ---------- */
+if('serviceWorker' in navigator){ window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{})); }
+
+/* ---------- mula ---------- */
+(function(){ if(!adaIbuBapa()){ bukaSetup('baru'); } else { tunjuk('skrinPicker'); muatPicker(); } })();
+</script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+{
+  "name": "Pintar Ria",
+  "short_name": "Pintar Ria",
+  "description": "Taman belajar huruf, nombor, warna & bentuk",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#fef9f0",
+  "theme_color": "#ff7a59",
+  "lang": "ms",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
